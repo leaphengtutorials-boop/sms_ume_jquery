@@ -1,0 +1,1 @@
+import{z as e}from"./index-TyVtEKdK.js";const t={midterm:{list:s=>e.get("/scores.php",{type:"midterm",...s}),save:s=>e.post("/scores.php",{...s,score_type:"midterm"})},final:{list:s=>e.get("/final_scores.php",s),save:s=>e.post("/final_scores.php",s),remove:s=>e.delete(`/final_scores.php?subject_id=${s}`)}};export{t as s};

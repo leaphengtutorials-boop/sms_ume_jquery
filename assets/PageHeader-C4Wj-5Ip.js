@@ -1,0 +1,1 @@
+import{o as a,c as s,b as i,t,p as n}from"./index-TyVtEKdK.js";const c={class:"page-header"},o={key:0},d={__name:"PageHeader",props:{icon:String,title:String,subtitle:String},setup(e){return(r,l)=>(a(),s("div",c,[i("h1",null,t(e.icon)+" "+t(e.title),1),e.subtitle?(a(),s("p",o,t(e.subtitle),1)):n("",!0)]))}};export{d as _};

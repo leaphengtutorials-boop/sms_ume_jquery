@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /sms_ume/
+
+  # បើ File ឬ Folder មិនមាន → បញ្ជូនទៅ index.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /sms_ume/index.html [L]
+</IfModule>

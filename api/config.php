@@ -21,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $DB_HOST = 'localhost';
-$DB_NAME = 'sms_ume';
+$DB_NAME = 'ume_db';
 $DB_USER = 'root';
-$DB_PASS = 'Admin@spspop2@&1997';
+$DB_PASS = '';
 
 try {
     $pdo = new PDO(

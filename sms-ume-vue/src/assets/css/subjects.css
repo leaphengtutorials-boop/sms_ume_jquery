@@ -1,0 +1,164 @@
+/**
+ * ============================================================
+ * SUBJECTS
+ * ============================================================
+ */
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.subject-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.3rem;
+  box-shadow: var(--shadow-sm);
+  border-top: 4px solid var(--primary);
+  transition: all 0.25s;
+}
+
+.subject-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.subject-card .code {
+  font-size: 0.72rem;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 0.6rem;
+}
+
+.subject-card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.subject-card .year {
+  font-size: 0.8rem;
+  color: var(--gray);
+  margin-bottom: 0.5rem;
+}
+
+.subject-card .stats {
+  display: flex;
+  gap: 0.6rem;
+  font-size: 0.78rem;
+  margin-top: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.subject-card .stats span {
+  padding: 3px 9px;
+  background: var(--light);
+  border-radius: 20px;
+  color: var(--gray);
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.subject-card .actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--light);
+}
+
+.subject-card .actions button {
+  flex: 1;
+  padding: 0.45rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--light);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray);
+  transition: all 0.2s;
+}
+
+.subject-card .actions button:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.subject-card .actions button.del:hover {
+  background: var(--danger);
+}
+
+.subject-student-count {
+  cursor: pointer;
+  background: var(--primary-light) !important;
+  color: var(--primary) !important;
+}
+
+.subject-student-count:hover {
+  background: var(--primary) !important;
+  color: white !important;
+}
+
+/* ============================================================
+   GRADES
+   ============================================================ */
+.grade-A { color: #10b981; }
+.grade-B { color: #3b82f6; }
+.grade-C { color: #8b5cf6; }
+.grade-D { color: #f59e0b; }
+.grade-E { color: #f97316; }
+.grade-F { color: #ef4444; }
+
+/* ============================================================
+   SUBJECT GROUP HEADER
+   ============================================================ */
+.subj-group-header {
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  margin: 1.5rem 0 1rem 0;
+  border-left: 4px solid var(--primary);
+}
+
+.subj-group-header:first-child {
+  margin-top: 0;
+}
+
+.subj-group-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin: 0;
+}
+
+.subj-group-stats {
+  font-size: 0.8rem;
+  color: #3730a3;
+  font-weight: 600;
+}
+
+.subjects-group-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.subj-chip {
+  display: inline-block;
+  background: #eef2ff;
+  color: #4f46e5;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  border: 1px solid #c7d2fe;
+  white-space: nowrap;
+  line-height: 1.5;
+}
