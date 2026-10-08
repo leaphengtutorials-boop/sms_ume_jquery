@@ -1,0 +1,259 @@
+/**
+ * ============================================================
+ * COMPONENTS — Buttons, Inputs, Cards, Badges
+ * ============================================================
+ */
+
+/* ============================================================
+   TOOLBAR
+   ============================================================ */
+.toolbar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+.input {
+  padding: 0.6rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: white;
+  transition: all 0.2s;
+  min-width: 130px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+.input:disabled,
+select[disabled] {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  cursor: not-allowed !important;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+}
+.btn-success {
+  background: linear-gradient(135deg, var(--success), #059669);
+  color: white;
+}
+.btn-danger {
+  background: linear-gradient(135deg, var(--danger), #dc2626);
+  color: white;
+}
+.btn-warning {
+  background: linear-gradient(135deg, var(--warning), #d97706);
+  color: white;
+}
+.btn-info {
+  background: linear-gradient(135deg, var(--info), #2563eb);
+  color: white;
+}
+.btn-secondary {
+  background: var(--light);
+  color: var(--dark);
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 2px solid var(--light);
+  font-weight: 700;
+}
+
+/* ============================================================
+   STATS CARDS (Dashboard)
+   ============================================================ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--primary);
+  transition: all 0.25s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-card .icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+.stat-card h3 {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 0.2rem;
+  font-weight: 700;
+}
+.stat-card p {
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+.stat-card.green {
+  border-left-color: var(--success);
+}
+.stat-card.green h3 {
+  color: var(--success);
+}
+.stat-card.orange {
+  border-left-color: var(--warning);
+}
+.stat-card.orange h3 {
+  color: var(--warning);
+}
+.stat-card.red {
+  border-left-color: var(--danger);
+}
+.stat-card.red h3 {
+  color: var(--danger);
+}
+
+/* ============================================================
+   ROW-2 (Two Column Layout)
+   ============================================================ */
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+.badge-info {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid #93c5fd;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  background: var(--dark);
+  color: white;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.3s;
+  z-index: 9999;
+  font-size: 0.9rem;
+  font-weight: 600;
+  max-width: 400px;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast.success {
+  background: linear-gradient(135deg, var(--success), #059669);
+}
+.toast.error {
+  background: linear-gradient(135deg, var(--danger), #dc2626);
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.empty-state .icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+.empty-state p {
+  color: var(--gray);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}

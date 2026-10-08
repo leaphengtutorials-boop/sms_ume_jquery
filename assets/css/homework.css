@@ -1,0 +1,29 @@
+/**
+ * ============================================================
+ * HOMEWORK
+ * ============================================================
+ */
+
+.hw-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.hw-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  box-shadow: var(--shadow-sm);
+  border-top: 4px solid var(--primary);
+}
+
+.hw-card h4 {
+  margin: 0.4rem 0;
+}
+
+.hw-card .actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}

@@ -1,0 +1,92 @@
+/**
+ * ============================================================
+ * REPORTS + SETTINGS
+ * ============================================================
+ */
+
+/* ============================================================
+   SETTINGS TABS
+   ============================================================ */
+.settings-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+
+.set-tab {
+  flex-shrink: 0;
+  padding: 0.7rem 1.2rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.set-tab.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+}
+
+.set-panel {
+  display: none;
+}
+.set-panel.active {
+  display: block;
+  animation: fadeIn 0.3s;
+}
+
+/* ============================================================
+   FORM GRID (Settings)
+   ============================================================ */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* ============================================================
+   COMPLETED STUDENTS TABLE
+   ============================================================ */
+#compTable td {
+  vertical-align: middle;
+}
+
+#compTable .avatar {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #10b981;
+}
+
+#compTable tr {
+  transition: all 0.2s;
+}
+
+#compTable tr:hover {
+  background: #dcfce7 !important;
+  transform: translateX(2px);
+}

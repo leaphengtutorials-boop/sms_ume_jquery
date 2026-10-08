@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="km">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ប្រព័ន្ធគ្រប់គ្រងសិស្ស — UME</title>
+
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/components.css" />
+    <link rel="stylesheet" href="assets/css/sidebar.css" />
+    <link rel="stylesheet" href="assets/css/tables.css" />
+    <link rel="stylesheet" href="assets/css/students.css" />
+    <link rel="stylesheet" href="assets/css/subjects.css" />
+    <link rel="stylesheet" href="assets/css/enrollment.css" />
+    <link rel="stylesheet" href="assets/css/attendance.css" />
+    <link rel="stylesheet" href="assets/css/homework.css" />
+    <link rel="stylesheet" href="assets/css/reports.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <div class="logo-icon">📚</div>
+        <div class="logo-text">
+          <h2>គ្រប់គ្រងសិស្ស</h2>
+          <small>Student Management</small>
+        </div>
+      </div>
+      <nav class="menu">
+        <a data-tab="dashboard" class="active"
+          ><span>📊</span> ផ្ទាំងគ្រប់គ្រង</a
+        >
+        <a data-tab="subjects"><span>📚</span> មុខវិជ្ជា</a>
+        <a data-tab="students"><span>👥</span> សិស្ស</a>
+        <a data-tab="enrollment"><span>📝</span> ចុះឈ្មោះចូលរៀន</a>
+        <a data-tab="attendance"><span>✅</span> វត្តមាន</a>
+        <a data-tab="homework"><span>📋</span> កិច្ចការ</a>
+        <a data-tab="scores"><span>📝</span> ពិន្ទុ Midterm</a>
+        <a data-tab="final"><span>🎓</span> ពិន្ទុ Final</a>
+        <a data-tab="results"><span>📈</span> លទ្ធផល</a>
+        <a data-tab="completed"><span>🎓</span> សិស្សបញ្ចប់</a>
+        <a data-tab="settings"><span>⚙️</span> ការកំណត់</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="tab active">
+        <div class="page-header">
+          <h1>📊 ផ្ទាំងគ្រប់គ្រង</h1>
+          <p>ទិដ្ឋភាពទូទៅ</p>
+        </div>
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="row-2">
+          <div class="card">
+            <h3>📚 មុខវិជ្ជាសកម្ម</h3>
+            <div id="activeSubjects"></div>
+          </div>
+          <div class="card">
+            <h3>🏆 សិស្សល្អបំផុត</h3>
+            <div id="topStudents"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUBJECTS -->
+      <section id="subjects" class="tab">
+        <div class="page-header">
+          <h1>📚 គ្រប់គ្រងមុខវិជ្ជា</h1>
+          <p>ចុចលើចំនួនសិស្ស ដើម្បីមើលបញ្ជី</p>
+        </div>
+
+        <!-- Row 1: Filters -->
+        <div class="toolbar">
+          <select id="subjectYearFilter" class="input">
+            <option value="">-- ឆ្នាំសិក្សា --</option>
+          </select>
+          <select id="subjectStudyYearFilter" class="input">
+            <option value="">-- ឆ្នាំទី --</option>
+            <option value="1">📖 ឆ្នាំទី ១</option>
+            <option value="2">📖 ឆ្នាំទី ២</option>
+            <option value="3">📖 ឆ្នាំទី ៣</option>
+            <option value="4">📖 ឆ្នាំទី ៤</option>
+          </select>
+          <select id="subjectSemesterFilter" class="input">
+            <option value="">-- ឆមាស --</option>
+            <option value="1">📅 ឆមាស ១</option>
+            <option value="2">📅 ឆមាស ២</option>
+          </select>
+          <select id="subjectCohortFilter" class="input">
+            <option value="">-- ជំនាន់ --</option>
+          </select>
+        </div>
+
+        <!-- Row 2: Search + Action -->
+        <div class="toolbar">
+          <input
+            type="text"
+            id="subjectSearch"
+            class="input"
+            placeholder="🔍 ស្វែងរក..."
+          />
+          <select id="subjectGroupBy" class="input">
+            <option value="year_sem">📁 បែងចែក តាម ឆ្នាំទី + ឆមាស</option>
+            <option value="year">📁 បែងចែក តាម ឆ្នាំទី</option>
+            <option value="none">📋 តារាងធម្មតា</option>
+          </select>
+          <button class="btn btn-primary" onclick="openSubjectForm()">
+            ➕ បន្ថែមមុខវិជ្ជា
+          </button>
+        </div>
+
+        <div id="subjectsGrid" class="subjects-grid"></div>
+      </section>
+
+      <!-- STUDENTS -->
+      <section id="students" class="tab">
+        <div class="page-header">
+          <h1>👥 គ្រប់គ្រងសិស្ស</h1>
+          <p>បន្ថែម · Import · ទាញគំរូ</p>
+        </div>
+        <div class="toolbar">
+          <button class="btn btn-primary" onclick="openStudentForm()">
+            ➕ បន្ថែមសិស្សថ្មី
+          </button>
+          <button class="btn btn-success" onclick="openImportModal()">
+            📥 Import Excel
+          </button>
+          <button class="btn btn-secondary" onclick="downloadTemplate()">
+            📄 ទាញយកគំរូ
+          </button>
+        </div>
+        <div class="toolbar">
+          <input
+            type="text"
+            id="studentSearch"
+            class="input"
+            placeholder="🔍 ស្វែងរក..."
+          />
+          <select id="studentGenderFilter" class="input">
+            <option value="">-- ភេទ --</option>
+            <option value="M">👨 ប្រុស</option>
+            <option value="F">👩 ស្រី</option>
+          </select>
+          <select id="studentPhotoFilter" class="input">
+            <option value="">-- រូបថត --</option>
+            <option value="has">✅ មាន</option>
+            <option value="none">❌ គ្មាន</option>
+          </select>
+          <select id="studentSubjectFilter" class="input">
+            <option value="">-- មុខវិជ្ជា --</option>
+          </select>
+          <select id="studentStatusFilter" class="input">
+            <option value="">-- ស្ថានភាព --</option>
+            <option value="active">🟢 កំពុងរៀន</option>
+            <option value="graduated">🎓 បញ្ចប់</option>
+            <option value="dropped">🔴 ឈប់</option>
+          </select>
+          <span class="badge-info" id="studentCount">0 នាក់</span>
+        </div>
+        <div id="studentsListView" class="students-list-view"></div>
+      </section>
+
+      <!-- ENROLLMENT -->
+      <section id="enrollment" class="tab">
+        <div class="page-header">
+          <h1>📝 ចុះឈ្មោះចូលរៀន</h1>
+          <p>តាមដានមុខវិជ្ជាច្រើន</p>
+        </div>
+        <div class="toolbar">
+          <select id="enrollSubject" class="input"></select>
+          <input
+            type="text"
+            id="enrollSearch"
+            class="input"
+            placeholder="🔍 ស្វែងរក..."
+          />
+          <span class="badge-info" id="enrollCount">0 នាក់</span>
+        </div>
+        <div class="toolbar">
+          <select id="enrollCohortFilter" class="input">
+            <option value="">-- ជំនាន់ --</option>
+          </select>
+          <select id="enrollYearFilter" class="input" disabled>
+            <option value="">-- ឆ្នាំ --</option>
+          </select>
+          <select id="enrollStatusFilter" class="input">
+            <option value="">-- ស្ថានភាពមុខវិជ្ជា --</option>
+            <option value="active">🟢 កំពុងរៀន</option>
+            <option value="completed">✅ បញ្ចប់</option>
+            <option value="dropped">🔴 ឈប់</option>
+          </select>
+          <select id="enrollStudentStatusFilter" class="input">
+            <option value="">-- ស្ថានភាពសិស្ស --</option>
+            <option value="active">🟢 កំពុងរៀន</option>
+            <option value="graduated">🎓 បញ្ចប់ការសិក្សា</option>
+          </select>
+          <select id="enrollViewMode" class="input">
+            <option value="all">📋 ទាំងអស់</option>
+            <option value="available">✅ អាចចុះឈ្មោះ</option>
+            <option value="busy">🔒 រវល់</option>
+          </select>
+        </div>
+        <div class="toolbar">
+          <button class="btn btn-success" onclick="selectAllEnrollment()">
+            ✅ ជ្រើសទាំងអស់
+          </button>
+          <button class="btn btn-warning" onclick="deselectAllEnrollment()">
+            ❌ ដកទាំងអស់
+          </button>
+          <button class="btn btn-info" onclick="bulkCompleteEnrollment()">
+            🎓 បញ្ចប់ទាំងអស់
+          </button>
+          <button class="btn btn-primary" onclick="saveEnrollment()">
+            💾 រក្សាទុក
+          </button>
+        </div>
+        <div id="enrollmentList" class="enrollment-list"></div>
+      </section>
+
+      <!-- ATTENDANCE -->
+      <section id="attendance" class="tab">
+        <div class="page-header"><h1>✅ វត្តមាន</h1></div>
+        <div class="view-toggle">
+          <button
+            class="att-view-btn active"
+            data-view="take"
+            onclick="switchAttView('take')"
+          >
+            ✅ ស្រង់វត្តមាន
+          </button>
+          <button
+            class="att-view-btn"
+            data-view="report"
+            onclick="switchAttView('report')"
+          >
+            📊 របាយការណ៍
+          </button>
+        </div>
+        <div id="attTakeView">
+          <div class="toolbar">
+            <select id="attSubject" class="input"></select>
+            <select id="attWeek" class="input" style="width: 160px"></select>
+            <span id="attWeekInfo"></span>
+            <input type="date" id="attDate" class="input" />
+            <button class="btn btn-secondary" onclick="refreshAttendance()">
+              🔄 ផ្ទុក
+            </button>
+            <button
+              class="btn btn-success"
+              onclick="markAllAttendance('present')"
+            >
+              ✅ ទាំងអស់
+            </button>
+            <button
+              class="btn btn-warning"
+              onclick="markAllAttendance('absent')"
+            >
+              ❌ អវត្តមាន
+            </button>
+            <button class="btn btn-primary" onclick="saveAttendance()">
+              💾 រក្សាទុក
+            </button>
+          </div>
+          <div class="toolbar">
+            <input
+              type="text"
+              id="attFilterSearch"
+              class="input"
+              placeholder="🔍 ស្វែងរក..."
+            />
+            <select id="attFilterCohort" class="input">
+              <option value="">-- ជំនាន់ --</option>
+            </select>
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-size: 0.85rem;
+                cursor: pointer;
+              "
+            >
+              <input
+                type="checkbox"
+                id="attOnlyCurrent"
+                style="width: auto; margin: 0"
+              />
+              <strong>⭐ តែជំនាន់បច្ចុប្បន្ន</strong>
+            </label>
+          </div>
+          <div id="attSummary" class="att-summary"></div>
+          <div class="table-wrap">
+            <table id="attTable">
+              <thead>
+                <tr>
+                  <th width="60">#</th>
+                  <th width="70">រូបថត</th>
+                  <th>លេខកូដ</th>
+                  <th>ឈ្មោះ</th>
+                  <th width="200">ស្ថានភាព</th>
+                  <th>កំណត់សម្គាល់</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="attReportView" style="display: none">
+          <div class="toolbar no-print">
+            <select id="attReportSubject" class="input"></select>
+            <input
+              type="text"
+              id="attReportSearch"
+              class="input"
+              placeholder="🔍 ស្វែងរក..."
+            />
+            <button class="btn btn-secondary" onclick="loadAttReport()">
+              📊 បង្ហាញ
+            </button>
+            <button class="btn btn-success" onclick="exportAttendance()">
+              📥 Export Excel
+            </button>
+            <button class="btn btn-primary" onclick="window.print()">
+              🖨️ Print
+            </button>
+          </div>
+          <div id="attReportContent"></div>
+        </div>
+      </section>
+
+      <!-- HOMEWORK -->
+      <section id="homework" class="tab">
+        <div class="page-header">
+          <h1>📋 កិច្ចការ</h1>
+          <p>Homework · Quiz · Assignment</p>
+        </div>
+
+        <!-- Row 1: Subject + Filters -->
+        <div class="toolbar">
+          <select id="hwSubject" class="input"></select>
+          <select id="hwCohortFilter" class="input">
+            <option value="">-- ជំនាន់ --</option>
+          </select>
+          <span id="hwCohortStatus"></span>
+        </div>
+
+        <!-- ✅ Row 2: Filters ថ្មី -->
+        <div class="toolbar">
+          <select id="hwYearFilter" class="input">
+            <option value="">-- ឆ្នាំសិក្សា --</option>
+          </select>
+          <select id="hwStudyYearFilter" class="input">
+            <option value="">-- ឆ្នាំទី --</option>
+            <option value="1">📖 ឆ្នាំទី ១</option>
+            <option value="2">📖 ឆ្នាំទី ២</option>
+            <option value="3">📖 ឆ្នាំទី ៣</option>
+            <option value="4">📖 ឆ្នាំទី ៤</option>
+          </select>
+          <select id="hwSemesterFilter" class="input">
+            <option value="">-- ឆមាស --</option>
+            <option value="1">📅 ឆមាស ១</option>
+            <option value="2">📅 ឆមាស ២</option>
+          </select>
+          <select id="hwType" class="input">
+            <option value="">-- ប្រភេទទាំងអស់ --</option>
+            <option value="homework">📝 Homework</option>
+            <option value="quiz">❓ Quiz</option>
+            <option value="assignment">📋 Assignment</option>
+          </select>
+        </div>
+
+        <!-- Row 3: Search + Action -->
+        <div class="toolbar">
+          <input
+            type="text"
+            id="hwFilterSearch"
+            class="input"
+            placeholder="🔍 ស្វែងរក..."
+          />
+          <button class="btn btn-secondary" onclick="refreshHomework()">
+            🔄 ផ្ទុក
+          </button>
+          <button
+            class="btn btn-primary"
+            onclick="openHomeworkForm()"
+            id="hwCreateBtn"
+          >
+            ➕ បង្កើតកិច្ចការ
+          </button>
+        </div>
+
+        <!-- Read-only warning -->
+        <div
+          id="hwReadonlyWarning"
+          style="
+            display: none;
+            background: #fef3c7;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #f59e0b;
+            font-size: 0.88rem;
+          "
+        >
+          <strong style="color: #92400e">⚠️ ជំនាន់នេះបានបញ្ចប់រួច</strong>
+          <span style="color: #78350f"> — មើលបាន ប៉ុន្តែមិនអាចកែបានទេ</span>
+        </div>
+
+        <div id="hwList" class="hw-list"></div>
+      </section>
+
+      <!-- MIDTERM SCORES -->
+      <section id="scores" class="tab">
+        <div class="page-header"><h1>📝 ពិន្ទុ Midterm</h1></div>
+        <div class="toolbar">
+          <select id="scoreSubject" class="input"></select>
+          <select id="scoreFilterCohort" class="input">
+            <option value="">-- ជំនាន់ --</option>
+          </select>
+          <input
+            type="text"
+            id="scoreTitle"
+            class="input"
+            value="Midterm Exam"
+            placeholder="ចំណងជើង"
+          />
+          <input type="date" id="scoreDate" class="input" />
+        </div>
+        <div class="toolbar">
+          <input
+            type="text"
+            id="scoreFilterSearch"
+            class="input"
+            placeholder="🔍 ស្វែងរក..."
+          />
+          <button class="btn btn-secondary" onclick="refreshScores()">
+            🔄 ផ្ទុក
+          </button>
+          <button class="btn btn-primary" onclick="saveScores()">
+            💾 រក្សាទុក
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table id="scoreTable">
+            <thead>
+              <tr>
+                <th width="60">#</th>
+                <th width="70">រូបថត</th>
+                <th>លេខកូដ</th>
+                <th>ឈ្មោះ</th>
+                <th width="180">ពិន្ទុ (0-100)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FINAL SCORES -->
+      <section id="final" class="tab">
+        <div class="page-header"><h1>🎓 ពិន្ទុ Final</h1></div>
+        <div
+          style="
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.2rem;
+            font-size: 0.85rem;
+            border-left: 4px solid #f59e0b;
+          "
+        >
+          <strong style="color: #92400e">⚠️ ចំណាំ៖</strong>
+          <span style="color: #78350f"
+            >ពិន្ទុ Final បញ្ចូលដោយ <strong>ការិយាល័យសាលា</strong></span
+          >
+        </div>
+        <div class="toolbar">
+          <select id="finalSubject" class="input"></select>
+          <select id="finalFilterCohort" class="input">
+            <option value="">-- ជំនាន់ --</option>
+          </select>
+          <input
+            type="text"
+            id="finalTitle"
+            class="input"
+            value="Final Exam"
+            placeholder="ចំណងជើង"
+          />
+          <input type="date" id="finalDate" class="input" />
+        </div>
+        <div class="toolbar">
+          <input
+            type="text"
+            id="finalFilterSearch"
+            class="input"
+            placeholder="🔍 ស្វែងរក..."
+          />
+          <button class="btn btn-secondary" onclick="refreshFinalScores()">
+            🔄 ផ្ទុក
+          </button>
+          <button class="btn btn-primary" onclick="saveFinalScores()">
+            💾 រក្សាទុក
+          </button>
+          <button class="btn btn-danger" onclick="deleteFinalScores()">
+            🗑️ លុប
+          </button>
+        </div>
+        <div id="finalInfo"></div>
+        <div class="table-wrap">
+          <table id="finalTable">
+            <thead>
+              <tr>
+                <th width="60">#</th>
+                <th width="70">រូបថត</th>
+                <th>លេខកូដ</th>
+                <th>ឈ្មោះ</th>
+                <th width="180">ពិន្ទុ Final</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <section id="results" class="tab">
+        <div class="page-header"><h1>📈 លទ្ធផល</h1></div>
+        <div class="toolbar no-print">
+          <select id="reportSubject" class="input"></select>
+          <select id="reportViewMode" class="input">
+            <option value="current">🎯 ជំនាន់បច្ចុប្បន្ន</option>
+            <option value="all">📊 ទាំងអស់</option>
+            <option value="history">📚 រួមបញ្ចប់</option>
+          </select>
+          <select id="reportFilterCohort" class="input">
+            <option value="">-- ជំនាន់ --</option>
+          </select>
+          <input
+            type="text"
+            id="reportFilterSearch"
+            class="input"
+            placeholder="🔍 ស្វែងរក..."
+          />
+        </div>
+        <div class="toolbar no-print">
+          <button class="btn btn-secondary" onclick="refreshReport()">
+            🔄 ផ្ទុក
+          </button>
+          <button class="btn btn-primary" onclick="window.print()">
+            🖨️ Print
+          </button>
+          <button class="btn btn-info" onclick="exportExcel()">📊 Excel</button>
+          <button class="btn btn-danger" onclick="exportPDF()">📄 PDF</button>
+        </div>
+        <div id="reportContent"></div>
+      </section>
+
+      <!-- COMPLETED STUDENTS -->
+      <section id="completed" class="tab">
+        <div class="page-header">
+          <h1>🎓 សិស្សដែលបានបញ្ចប់មុខវិជ្ជា</h1>
+          <p>របាយការណ៍សិស្សបញ្ចប់តាមជំនាន់ · ឆ្នាំ · ឆមាស · មុខវិជ្ជា</p>
+        </div>
+
+        <div class="toolbar">
+          <select id="compCohortFilter" class="input">
+            <option value="">-- ជំនាន់ --</option>
+          </select>
+          <select id="compYearFilter" class="input">
+            <option value="">-- ឆ្នាំសិក្សា --</option>
+          </select>
+          <select id="compStudyYearFilter" class="input">
+            <option value="">-- ឆ្នាំទី --</option>
+            <option value="1">ឆ្នាំទី ១</option>
+            <option value="2">ឆ្នាំទី ២</option>
+            <option value="3">ឆ្នាំទី ៣</option>
+            <option value="4">ឆ្នាំទី ៤</option>
+          </select>
+          <select id="compSemesterFilter" class="input">
+            <option value="">-- ឆមាស --</option>
+            <option value="1">ឆមាស ១</option>
+            <option value="2">ឆមាស ២</option>
+          </select>
+        </div>
+
+        <div class="toolbar">
+          <select id="compSubjectFilter" class="input">
+            <option value="">-- មុខវិជ្ជា --</option>
+          </select>
+          <select id="compStudentStatusFilter" class="input">
+            <option value="">-- ស្ថានភាព --</option>
+            <option value="active">🟢 កំពុងរៀន</option>
+            <option value="graduated">🎓 បញ្ចប់</option>
+            <option value="dropped">🔴 ឈប់</option>
+          </select>
+          <input
+            type="text"
+            id="compSearch"
+            class="input"
+            placeholder="🔍 ស្វែងរក..."
+          />
+          <button class="btn btn-secondary" onclick="loadCompleted()">
+            🔄 ផ្ទុក
+          </button>
+          <button class="btn btn-info" onclick="exportCompletedExcel()">
+            📊 Excel
+          </button>
+          <span class="badge-info" id="compCount">0 នាក់</span>
+        </div>
+
+        <div class="table-wrap">
+          <table id="compTable">
+            <thead>
+              <tr>
+                <th width="50">#</th>
+                <th width="60">រូបថត</th>
+                <th>លេខកូដ</th>
+                <th>ឈ្មោះ</th>
+                <th>ជំនាន់</th>
+                <th>មុខវិជ្ជា</th>
+                <th>ឆ្នាំ/ឆមាស</th>
+                <th width="130">ពិន្ទុ</th>
+                <th width="80">សរុប</th>
+                <th width="70">និទ្ទេស</th>
+                <th width="130">បញ្ចប់</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section id="settings" class="tab">
+        <div class="page-header"><h1>⚙️ ការកំណត់</h1></div>
+        <div class="settings-tabs">
+          <button class="set-tab active" data-set="weights">⚖️ ទម្ងន់</button>
+          <button class="set-tab" data-set="rules">✅ ច្បាប់វត្តមាន</button>
+          <button class="set-tab" data-set="years">📅 ឆ្នាំ</button>
+          <button class="set-tab" data-set="cohorts">🎓 ជំនាន់</button>
+        </div>
+        <div class="settings-content">
+          <div id="set-weights" class="set-panel active">
+            <div class="card">
+              <h3>⚖️ ទម្ងន់ពិន្ទុ</h3>
+              <select
+                id="weightSubject"
+                class="input"
+                style="margin-bottom: 1rem"
+              ></select>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>✅ Attendance (%)</label
+                  ><input
+                    type="number"
+                    id="w_attendance"
+                    class="input"
+                    value="10"
+                    step="0.5"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>📝 Homework (%)</label
+                  ><input
+                    type="number"
+                    id="w_homework"
+                    class="input"
+                    value="10"
+                    step="0.5"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>❓ Quiz (%)</label
+                  ><input
+                    type="number"
+                    id="w_quiz"
+                    class="input"
+                    value="10"
+                    step="0.5"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>📖 Midterm (%)</label
+                  ><input
+                    type="number"
+                    id="w_midterm"
+                    class="input"
+                    value="20"
+                    step="0.5"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>📋 Assignment (%)</label
+                  ><input
+                    type="number"
+                    id="w_assignment"
+                    class="input"
+                    value="15"
+                    step="0.5"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>🎓 Final (%)</label
+                  ><input
+                    type="number"
+                    id="w_final"
+                    class="input"
+                    value="35"
+                    step="0.5"
+                  />
+                </div>
+              </div>
+              <div
+                style="
+                  background: #f0fdf4;
+                  padding: 0.8rem;
+                  border-radius: 10px;
+                  margin-bottom: 1rem;
+                  text-align: center;
+                "
+              >
+                <strong
+                  >ផលបូក:
+                  <span id="weightTotal" style="color: var(--success)">100</span
+                  >%</strong
+                >
+              </div>
+              <button class="btn btn-primary" onclick="saveWeights()">
+                💾 រក្សាទុក
+              </button>
+            </div>
+          </div>
+          <div id="set-rules" class="set-panel">
+            <div class="card">
+              <h3>✅ ច្បាប់វត្តមាន</h3>
+              <select
+                id="ruleSubject"
+                class="input"
+                style="margin-bottom: 1rem"
+              ></select>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>✅ ពិន្ទុពេញ</label
+                  ><input
+                    type="number"
+                    id="r_present"
+                    class="input"
+                    value="1.0"
+                    step="0.1"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>⏰ កាត់យឺត</label
+                  ><input
+                    type="number"
+                    id="r_late"
+                    class="input"
+                    value="0.5"
+                    step="0.1"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>❌ កាត់អវត្តមាន</label
+                  ><input
+                    type="number"
+                    id="r_absent"
+                    class="input"
+                    value="1.0"
+                    step="0.1"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>📝 កាត់ច្បាប់</label
+                  ><input
+                    type="number"
+                    id="r_permission"
+                    class="input"
+                    value="0.3"
+                    step="0.1"
+                  />
+                </div>
+              </div>
+              <button class="btn btn-primary" onclick="saveRules()">
+                💾 រក្សាទុក
+              </button>
+            </div>
+          </div>
+          <div id="set-years" class="set-panel">
+            <div class="card">
+              <h3>📅 ឆ្នាំសិក្សា</h3>
+              <div class="toolbar">
+                <input
+                  type="text"
+                  id="newYearName"
+                  class="input"
+                  placeholder="ឈ្មោះ 2026-2027"
+                />
+                <input type="date" id="newYearStart" class="input" />
+                <input type="date" id="newYearEnd" class="input" />
+                <button class="btn btn-primary" onclick="createYear()">
+                  ➕ បន្ថែម
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table id="yearsTable">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>ឈ្មោះ</th>
+                      <th>ចាប់ផ្តើម</th>
+                      <th>បញ្ចប់</th>
+                      <th>សកម្ម</th>
+                      <th>សកម្មភាព</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div id="set-cohorts" class="set-panel">
+            <div class="card">
+              <h3>🎓 ជំនាន់</h3>
+              <div class="toolbar">
+                <input
+                  type="text"
+                  id="newCohortName"
+                  class="input"
+                  placeholder="ឈ្មោះជំនាន់"
+                />
+                <input
+                  type="text"
+                  id="newCohortDesc"
+                  class="input"
+                  placeholder="ការពិពណ៌នា"
+                />
+                <button class="btn btn-primary" onclick="createCohort()">
+                  ➕ បន្ថែម
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table id="cohortsTable">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>ឈ្មោះ</th>
+                      <th>ការពិពណ៌នា</th>
+                      <th>ចំនួនសិស្ស</th>
+                      <th>បច្ចុប្បន្ន</th>
+                      <th>សកម្មភាព</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="modal" class="modal">
+      <div class="modal-content" id="modalContent"></div>
+    </div>
+    <div id="toast" class="toast"></div>
+
+    <!-- CORE -->
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/helpers.js"></script>
+    <script src="assets/js/core/api.js"></script>
+
+    <!-- UI -->
+    <script src="assets/js/ui/tabs.js"></script>
+    <script src="assets/js/ui/modal.js"></script>
+    <script src="assets/js/ui/cohort-year-link.js"></script>
+
+    <!-- MODULES -->
+    <script src="assets/js/modules/years/years.js"></script>
+    <script src="assets/js/modules/cohorts/cohorts.js"></script>
+    <script src="assets/js/modules/subjects/subjects.js"></script>
+    <script src="assets/js/modules/subjects/subject-students.js"></script>
+    <script src="assets/js/modules/students/students.js"></script>
+    <script src="assets/js/modules/students/student-form.js"></script>
+    <script src="assets/js/modules/students/student-history.js"></script>
+    <script src="assets/js/modules/students/student-photo.js"></script>
+    <script src="assets/js/modules/students/student-import.js"></script>
+    <script src="assets/js/modules/enrollment/enrollment.js"></script>
+    <script src="assets/js/modules/attendance/attendance.js"></script>
+    <script src="assets/js/modules/attendance/attendance-weeks.js"></script>
+    <script src="assets/js/modules/attendance/attendance-report.js"></script>
+    <script src="assets/js/modules/homework/homework.js"></script>
+    <script src="assets/js/modules/scores/scores-midterm.js"></script>
+    <script src="assets/js/modules/scores/scores-final.js"></script>
+    <script src="assets/js/modules/reports/reports.js"></script>
+    <script src="assets/js/modules/settings/weights.js"></script>
+    <script src="assets/js/modules/settings/rules.js"></script>
+    <script src="assets/js/modules/dashboard/dashboard.js"></script>
+    <script src="assets/js/modules/completed/completed.js"></script>
+
+    <!-- INIT (LAST) -->
+    <script src="assets/js/core/init.js"></script>
+  </body>
+</html>

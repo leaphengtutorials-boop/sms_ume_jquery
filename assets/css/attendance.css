@@ -1,0 +1,113 @@
+/**
+ * ============================================================
+ * ATTENDANCE
+ * ============================================================
+ */
+
+/* ============================================================
+   SUMMARY CARDS
+   ============================================================ */
+.att-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.summary-card {
+  background: white;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--gray);
+}
+
+.summary-card.present    { border-left-color: var(--success); }
+.summary-card.late       { border-left-color: var(--warning); }
+.summary-card.absent     { border-left-color: var(--danger); }
+.summary-card.permission { border-left-color: var(--info); }
+
+.summary-card .num {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.summary-card.present .num    { color: var(--success); }
+.summary-card.late .num       { color: var(--warning); }
+.summary-card.absent .num     { color: var(--danger); }
+.summary-card.permission .num { color: var(--info); }
+
+.summary-card .label {
+  font-size: 0.8rem;
+  color: var(--gray);
+  font-weight: 600;
+}
+
+/* ============================================================
+   STATUS SELECT
+   ============================================================ */
+.status-select {
+  padding: 0.45rem 0.8rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.status-present {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+.status-late {
+  background: #fef9c3;
+  color: #854d0e;
+  border-color: #fde047;
+}
+.status-absent {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+.status-permission {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #93c5fd;
+}
+
+/* ============================================================
+   VIEW TOGGLE (Take / Report)
+   ============================================================ */
+.att-view-btn {
+  padding: 0.5rem 1.1rem;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray);
+  transition: all 0.2s;
+}
+
+.att-view-btn:hover {
+  background: var(--light);
+}
+.att-view-btn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+/* ============================================================
+   REPORT TABLE CELLS
+   ============================================================ */
+#attReportContent td.present    { background: #dcfce7; color: #166534; }
+#attReportContent td.late       { background: #fef9c3; color: #854d0e; }
+#attReportContent td.absent     { background: #fee2e2; color: #991b1b; }
+#attReportContent td.permission { background: #dbeafe; color: #1e40af; }
